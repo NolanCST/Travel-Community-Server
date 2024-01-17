@@ -11,16 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('personal_access_tokens', function (Blueprint $table) {
+        Schema::create('travel_days', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->morphs('tokenable');
-            $table->string('name');
-            $table->string('token', 64)->unique();
-            $table->text('abilities')->nullable();
-            $table->timestamp('last_used_at')->nullable();
-            $table->timestamp('expires_at')->nullable();
+            $table->char('title_day', 50);
+            $table->text('description_day');
             $table->timestamps();
+            $table->unsignedBigInteger('travel_id');
+
+            $table->foreign('travel_id')->references('id')->on('travels')->onDelete('cascade');
         });
     }
 
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('personal_access_tokens');
+        Schema::dropIfExists('travel_days');
     }
 };
