@@ -34,7 +34,7 @@ class ConnexionController extends Controller
     public function login (Request $request) {
 
         $credentials = Validator::make($request->all(), [
-            'pseudo' => 'required',
+            'email' => 'required|email',
             'password' => 'required',
         ]);
         if ($credentials->fails()) {
@@ -42,31 +42,23 @@ class ConnexionController extends Controller
                 'validation_errors'=>$credentials->message(),
             ]);
         } else {
-            $user = User::where('pseudo', $request->pseudo)->first();
+            $user = User::where('email', $request->email)->first();
 
             if(! $user || ! Hash::check($request->password, $user->password)) {
                 return response()->json([
                     'status'=>401,
-                    'message'=>'Le pseudo ou le mot de passe est invalide',
+                    'message'=>'L\'email ou le mot de passe est invalide',
                 ]);
             } else {
                 $token = $user->createToken($user->email.'_token')->plainTextToken;
 
                 return response()->json([
                     'status'=>200,
-                    'pseudo'=>$user->pseudo,
+                    'email'=>$user->email,
                     'token'=>$token,
                     'message'=>'Connexion réussie',
                 ]);
             }
-        }
-
-        if (Auth::attempt(request()->except(['_token']))) {
-            $user = Auth::user();
-            // $success =  $user->createToken('MyApp')->plainTextToken;
-            return redirect()->route('admin.dashboard');
-        } else {
-            return Response(['email ou mot de passe incorect'], 401);
         }
     }
 
