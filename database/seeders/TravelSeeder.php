@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class TravelSeeder extends Seeder
 {
@@ -12,6 +13,22 @@ class TravelSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        $users = DB::table('users')->get();
+
+        foreach ($users as $user) {
+            $user_id = $user->id;
+            DB::table('travels')->insert([
+                [
+                'user_id' => $user_id,
+                'title' => 'Rome',
+                'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg'
+                ],
+                [
+                    'user_id' => $user_id,
+                    'title' => 'Rome',
+                    'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg'
+                ]
+            ]);
+        }
     }
 }

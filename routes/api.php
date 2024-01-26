@@ -20,6 +20,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [UserController::class], 'getUser')->name('user');
 });
 
+Route::resource('/travels', TravelController::class);
+
 // Validation de l'inscription dans la BDD
 Route::post('/register', [ConnexionController::class, 'Register'])->name('register');
 
