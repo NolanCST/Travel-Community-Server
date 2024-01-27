@@ -20,10 +20,12 @@ class TravelLegislationSeeder extends Seeder
             $travel_id = $travel->id;
             foreach ($legislations as $legislation) {
                 $legislation_id = $legislation->id;
-                DB::table('travel_legislation')->insert([
-                'travel_id' => $travel_id,
-                'legislation_id' => $legislation_id
-            ]);
+                if ($travel->country === $legislation->country) {
+                    DB::table('travel_legislation')->insert([
+                        'travel_id' => $travel_id,
+                        'legislation_id' => $legislation_id
+                    ]);
+                }
             }
         }
     }

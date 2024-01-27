@@ -16,6 +16,7 @@ return new class extends Migration
             $table->id();
             $table->char('title', 50);
             $table->string('image');
+            $table->char('country', 50);
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
 

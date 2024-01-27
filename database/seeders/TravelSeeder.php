@@ -20,13 +20,15 @@ class TravelSeeder extends Seeder
             DB::table('travels')->insert([
                 [
                 'user_id' => $user_id,
-                'title' => 'Rome',
-                'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg'
+                'title' => 'Séjour de 3 jour à Rome',
+                'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg',
+                'country' => 'Italy'
                 ],
                 [
-                    'user_id' => $user_id,
-                    'title' => 'Rome',
-                    'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg'
+                'user_id' => $user_id,
+                'title' => 'Séjour de 3 jour à Rome',
+                'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg',
+                'country' => 'Italy'
                 ]
             ]);
         }
