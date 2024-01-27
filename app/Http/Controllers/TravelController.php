@@ -12,7 +12,13 @@ class TravelController extends Controller
      */
     public function index()
     {
-        //
+        $travels = Travel::getAll();
+        dd($travels);
+        $responseData = [
+            'travels' => $travels,
+        ];
+
+        return response()->json($responseData);
     }
 
     /**
