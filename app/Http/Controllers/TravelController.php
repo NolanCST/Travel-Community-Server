@@ -13,7 +13,7 @@ class TravelController extends Controller
     public function index()
     {
         $travels = Travel::getAll();
-        
+        dd($travels);
         $responseData = [
             'travels' => $travels,
         ];
@@ -42,8 +42,18 @@ class TravelController extends Controller
      */
     public function show(Travel $travel)
     {
-        //
+        $travel = Travel::select('travels.*')
+            ->where('id', $travel['id'])
+            ->with('legislations')
+            ->get();
+
+        $responseData = [
+            'travel' => $travel,
+        ];
+
+        return response()->json($responseData);
     }
+
 
     /**
      * Show the form for editing the specified resource.
