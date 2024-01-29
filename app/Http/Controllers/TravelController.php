@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Travel;
+use App\Models\TravelDay;
+use App\Models\DayImage;
 use Illuminate\Http\Request;
 
 class TravelController extends Controller
@@ -13,7 +15,6 @@ class TravelController extends Controller
     public function index()
     {
         $travels = Travel::getAll();
-        dd($travels);
         $responseData = [
             'travels' => $travels,
         ];
@@ -42,6 +43,14 @@ class TravelController extends Controller
      */
     public function show(Travel $travel)
     {
+        $dayImages = [];
+
+        $travelDays = TravelDay::where('travel_id', $travel['id'])->get();
+
+        foreach ($travelDays as $travelDay) {
+            $dayImages[] = DayImage::where('travel_day_id', $travelDay->id)->get();
+        };
+
         $travel = Travel::select('travels.*')
             ->where('id', $travel['id'])
             ->with('legislations')
@@ -49,6 +58,8 @@ class TravelController extends Controller
 
         $responseData = [
             'travel' => $travel,
+            'travelDays' => $travelDays,
+            'dayImages' => $dayImages,
         ];
 
         return response()->json($responseData);
