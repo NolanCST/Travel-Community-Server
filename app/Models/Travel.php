@@ -15,6 +15,8 @@ class Travel extends Model
         'user_id'
     ];
 
+    protected $table = 'travels';
+
     public static function getAll() {
         return Travel::select('travels.*')
         ->leftjoin('travel_days', 'travels.id', '=', 'travel_days.travel_id')
@@ -25,6 +27,6 @@ class Travel extends Model
     }
 
     public function legislations() {
-        return $this->belongsToMany(Legislation::class);
+        return $this->belongsToMany(Legislation::class, 'travel_legislation', 'travel_id', 'legislation_id');
     }
 }
