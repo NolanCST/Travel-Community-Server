@@ -15,7 +15,8 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->char('title', 50);
-            $table->binary('image');
+            $table->string('image');
+            $table->char('country', 50);
             $table->timestamps();
             $table->unsignedBigInteger('user_id');
 

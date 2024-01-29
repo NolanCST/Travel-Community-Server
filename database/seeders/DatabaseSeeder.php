@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class DatabaseSeeder extends Seeder
 {
@@ -14,9 +15,24 @@ class DatabaseSeeder extends Seeder
     {
         // \App\Models\User::factory(10)->create();
 
-        // \App\Models\User::factory()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        DB::table('users')->insert([
+            [
+                'lastname' => 'Test',
+                'firstname' => 'Test',
+                'pseudo' => 'Test',
+                'email' => 'test@example.com',
+                'password' => bcrypt('Azertyuiop123*'),
+                'country' => 'France',
+                'status' => '0'
+            ]
+        ]);
+
+        $this->call([
+            TravelSeeder::class,
+            TravelDaySeeder::class,
+            DayImageSeeder::class,
+            LegislationSeeder::class,
+            TravelLegislationSeeder::class,
+        ]);
     }
 }

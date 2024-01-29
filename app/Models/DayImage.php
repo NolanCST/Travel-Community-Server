@@ -11,6 +11,7 @@ class DayImage extends Model
 
     protected $fillable = [
         'image',
+        'alt',
         'travel_day_id'
     ];
 }

@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('day_images', function (Blueprint $table) {
             $table->engine = 'InnoDB';
             $table->id();
-            $table->binary('image');
+            $table->string('image');
+            $table->string('alt');
             $table->timestamps();
             $table->unsignedBigInteger('travel_day_id');
 
