@@ -35,7 +35,27 @@ class TravelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $credentials = $request->validate([
+            'title' => 'required|max:50',
+            'description' => 'required',
+            'image' => 'mimes:jpg,png,svg',
+            'days' => 'required|integer',
+            'country' => 'required',
+        ]);
+
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
+            $travel = Travel::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $request->image,
+                'days' => $request->days,
+                'country' => $request->country,
+            ]);
+        }
     }
 
     /**

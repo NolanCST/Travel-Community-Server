@@ -15,6 +15,7 @@ return new class extends Migration
             $table->engine = 'InnoDB';
             $table->id();
             $table->char('title', 50);
+            $table->string('description');
             $table->string('image');
             $table->integer('days');
             $table->char('country', 50);

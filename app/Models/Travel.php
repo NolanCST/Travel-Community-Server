@@ -10,8 +10,11 @@ class Travel extends Model
     use HasFactory;
 
     public $fillable = [
-        'title', 
+        'title',
+        'description',
         'image',
+        'days',
+        'country',
         'user_id'
     ];
 
