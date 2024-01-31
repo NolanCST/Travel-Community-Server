@@ -14,4 +14,14 @@ class Travel extends Model
         'image',
         'user_id'
     ];
+
+    protected $table = 'travels';
+
+    public static function getAll() {
+        return Travel::select('travels.*')->get();
+    }
+
+    public function legislations() {
+        return $this->belongsToMany(Legislation::class, 'travel_legislation', 'travel_id', 'legislation_id');
+    }
 }
