@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 use Hash;
 
 class ConnexionController extends Controller
@@ -33,11 +32,12 @@ class ConnexionController extends Controller
 
     public function login (Request $request) {
 
-        $credentials = Validator::make($request->all(), [
+        $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-        if ($credentials->fails()) {
+
+        if (!$credentials) {
             return Response()->json([
                 'validation_errors'=>$credentials->message(),
             ]);
@@ -49,8 +49,8 @@ class ConnexionController extends Controller
                     'status'=>401,
                     'message'=>'L\'email ou le mot de passe est invalide',
                 ]);
-            } else {
-                $token = $user->createToken($user->email.'_token')->plainTextToken;
+            } else if(Auth::attempt($credentials)) {
+                $token = Auth::user()->createToken('authToken')->plainTextToken;
 
                 return response()->json([
                     'status'=>200,
