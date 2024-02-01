@@ -13,6 +13,7 @@ class Travel extends Model
         'title',
         'description',
         'image',
+        'alt',
         'days',
         'country',
         'user_id'

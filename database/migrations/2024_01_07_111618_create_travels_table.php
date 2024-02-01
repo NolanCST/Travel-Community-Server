@@ -16,7 +16,8 @@ return new class extends Migration
             $table->id();
             $table->char('title', 50);
             $table->string('description');
-            $table->string('image');
+            $table->string('image')->nullable();
+            $table->string('alt')->nullable();
             $table->integer('days');
             $table->char('country', 50);
             $table->timestamps();

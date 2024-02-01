@@ -35,6 +35,7 @@ class TravelController extends Controller
      */
     public function store(Request $request)
     {
+       
         $credentials = $request->validate([
             'title' => 'required|max:50',
             'description' => 'required',
@@ -42,6 +43,9 @@ class TravelController extends Controller
             'days' => 'required|integer',
             'country' => 'required',
         ]);
+
+        $fileName = time() . '.' .$request->image->getClientOriginalName();
+        $path = $request->image->storeAs('public/images', $fileName);
 
         if (!$credentials) {
             return Response()->json([
@@ -51,9 +55,11 @@ class TravelController extends Controller
             $travel = Travel::create([
                 'title' => $request->title,
                 'description' => $request->description,
-                'image' => $request->image,
+                'image' => $fileName,
+                'alt' => $fileName,
                 'days' => $request->days,
                 'country' => $request->country,
+                'user_id' => $request->user_id,
             ]);
         }
     }

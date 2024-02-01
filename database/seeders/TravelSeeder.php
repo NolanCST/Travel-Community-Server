@@ -21,14 +21,18 @@ class TravelSeeder extends Seeder
                 [
                 'user_id' => $user_id,
                 'title' => 'Séjour de 3 jours à Rome',
+                'description' => 'Test',
                 'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg',
+                'alt' => 'image',
                 'days' => '3',
                 'country' => 'Italy'
                 ],
                 [
                 'user_id' => $user_id,
                 'title' => 'Séjour de 3 jours à Rome',
+                'description' => 'Test',
                 'image' => 'https://res.klook.com/image/upload/fl_lossy.progressive,w_800,c_fill,q_85/Mobile/City/afmqgg5h0jl9wnr1dfmf.jpg',
+                'alt' => 'image',
                 'days' => '3',
                 'country' => 'Italy'
                 ]
