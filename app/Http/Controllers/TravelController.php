@@ -35,6 +35,7 @@ class TravelController extends Controller
      */
     public function store(Request $request)
     {
+
         $credentials = $request->validate([
             'title' => 'required|max:50',
             'description' => 'required',
@@ -63,7 +64,7 @@ class TravelController extends Controller
                 'country' => $request->country,
                 'user_id' => $request->user_id,
             ]);
-
+            
             $travelDays = json_decode($request->travelDays);
 
             foreach ($travelDays as $travelDay) {
@@ -72,6 +73,17 @@ class TravelController extends Controller
                     'description_day' => $travelDay->descriptionDay,
                     'travel_id' => $travel->id,
                 ]);
+
+                foreach ($travelDay->images as $image) {
+                    $imageName = time() . '.' .$image->getClientOriginalName();
+                    $path = $request->image->storeAs('public/images', $imageName);
+                    
+                    $addImage = DayImage::create([
+                        'image' => $imageName,
+                        'alt' => $imageName,
+                        'travel_day_id' => $addDay->id,
+                    ]);
+                }
             }
         }
     }
