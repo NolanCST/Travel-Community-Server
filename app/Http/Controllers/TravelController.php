@@ -35,7 +35,58 @@ class TravelController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $credentials = $request->validate([
+            'title' => 'required|max:50',
+            'description' => 'required',
+            'image' => 'mimes:jpg,png,svg',
+            'days' => 'required|integer',
+            'country' => 'required',
+            'user_id' => 'required',
+            'travelDays' => 'required',
+        ]);
+
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
+
+            $fileName = time() . '.' .$request->image->getClientOriginalName();
+            $path = $request->image->storeAs('public/images', $fileName);
+
+            $travel = Travel::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $fileName,
+                'alt' => $fileName,
+                'days' => $request->days,
+                'country' => $request->country,
+                'user_id' => $request->user_id,
+            ]);
+            
+            // $travelDays = json_decode($request->travelDays);
+        // return response()->json($request->travelDays);
+            foreach ($request->travelDays as $travelDay) {
+                
+                $addDay = TravelDay::create([
+                    'title_day' => $travelDay['titleDay'],
+                    'description_day' => $travelDay['descriptionDay'],
+                    'travel_id' => $travel->id,
+                ]);
+                
+                foreach ($travelDay['images'] as $image) {
+                    $imageName = time() . '.' . $image->getClientOriginalName();
+                    $path = $image->storeAs('public/images', $imageName);
+                
+                    $addImage = DayImage::create([
+                        'image' => $imageName,
+                        'alt' => $imageName,
+                        'travel_day_id' => $addDay->id,
+                    ]);
+                }
+            }
+        }
     }
 
     /**

@@ -10,7 +10,7 @@ use Hash;
 class ConnexionController extends Controller
 {
     public function register (Request $request) {
-        $request->validate([
+        $credentials = $request->validate([
             'lastname' => 'required',
             'firstname' => 'required',
             'pseudo' => 'required',
@@ -19,15 +19,21 @@ class ConnexionController extends Controller
             'country' => 'required'
         ]);
 
-        $user = User::create([
-            'lastname' => $request->lastname,
-            'firstname' => $request->firstname,
-            'pseudo' => $request->pseudo,
-            'email' => $request->email,
-            'password' => $request->password,
-            'country' => $request->country,
-            'status' => 0 // A voir comment je gère le status
-        ]);
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
+            $user = User::create([
+                'lastname' => $request->lastname,
+                'firstname' => $request->firstname,
+                'pseudo' => $request->pseudo,
+                'email' => $request->email,
+                'password' => $request->password,
+                'country' => $request->country,
+                'status' => 0 // A voir comment je gère le status
+            ]);
+        }
     }
 
     public function login (Request $request) {
