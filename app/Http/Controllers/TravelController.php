@@ -65,19 +65,20 @@ class TravelController extends Controller
                 'user_id' => $request->user_id,
             ]);
             
-            $travelDays = json_decode($request->travelDays);
-
-            foreach ($travelDays as $travelDay) {
+            // $travelDays = json_decode($request->travelDays);
+        // return response()->json($request->travelDays);
+            foreach ($request->travelDays as $travelDay) {
+                
                 $addDay = TravelDay::create([
-                    'title_day' => $travelDay->titleDay,
-                    'description_day' => $travelDay->descriptionDay,
+                    'title_day' => $travelDay['titleDay'],
+                    'description_day' => $travelDay['descriptionDay'],
                     'travel_id' => $travel->id,
                 ]);
-
-                foreach ($travelDay->images as $image) {
-                    $imageName = time() . '.' .$image->getClientOriginalName();
-                    $path = $request->image->storeAs('public/images', $imageName);
-                    
+                
+                foreach ($travelDay['images'] as $image) {
+                    $imageName = time() . '.' . $image->getClientOriginalName();
+                    $path = $image->storeAs('public/images', $imageName);
+                
                     $addImage = DayImage::create([
                         'image' => $imageName,
                         'alt' => $imageName,
