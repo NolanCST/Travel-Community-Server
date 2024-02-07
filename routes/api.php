@@ -21,6 +21,9 @@ use App\Http\Controllers\TravelController;
 Route::middleware('auth:sanctum')->group(function () {
     // Récupération de l'utilisateur
     Route::get('/user', function(Request $request) {return $request->user();});
+
+    // Deconnexion
+    Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
 });
 
 // Toutes les routes pour travels
