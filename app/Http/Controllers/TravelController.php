@@ -65,8 +65,6 @@ class TravelController extends Controller
                 'user_id' => $request->user_id,
             ]);
             
-            // $travelDays = json_decode($request->travelDays);
-        // return response()->json($request->travelDays);
             foreach ($request->travelDays as $travelDay) {
                 
                 $addDay = TravelDay::create([
@@ -98,14 +96,24 @@ class TravelController extends Controller
 
         $travelDays = TravelDay::where('travel_id', $travel['id'])->get();
 
-        foreach ($travelDays as $travelDay) {
-            $dayImages[] = DayImage::where('travel_day_id', $travelDay->id)->get();
+        foreach ($travelDays as $travelImages) {
+            $dayImages[] = DayImage::where('travel_day_id', $travelImages->id)->get();
         };
+
+        foreach ($dayImages as $images) {
+            foreach ($images as $image) {
+                $image->image = asset('storage/images/' . $image->image);
+            }
+        }
 
         $travel = Travel::select('travels.*')
             ->where('id', $travel['id'])
             ->with('legislations')
             ->get();
+
+        foreach ($travel as $element) {
+            $element->image = asset('storage/images/' . $element->image);
+        }
 
         $responseData = [
             'travel' => $travel,
@@ -138,6 +146,12 @@ class TravelController extends Controller
      */
     public function destroy(Travel $travel)
     {
-        //
+        $result = $travel->delete();
+        
+        if($result) {
+            return ['message' => 'Voyage supprimé avec succès'];
+        } else {
+            return ['message' => 'Erreur dans la suppression de votre voyage'];
+        }
     }
 }

@@ -68,7 +68,11 @@ class ConnexionController extends Controller
         }
     }
 
-    public function logout () {
+    public function logout(Request $request)
+    {
+        Auth::guard('web')->logout(); // Déconnexion de l'utilisateur
 
+        // Retourne un JSON indiquant le succès de la déconnexion
+        return response()->json(['message' => 'Déconnexion réussie.'], 200);
     }
 }
