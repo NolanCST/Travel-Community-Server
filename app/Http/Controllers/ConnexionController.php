@@ -70,7 +70,7 @@ class ConnexionController extends Controller
 
     public function logout(Request $request)
     {
-        Auth::logout(); // Déconnexion de l'utilisateur
+        Auth::guard('web')->logout(); // Déconnexion de l'utilisateur
 
         // Retourne un JSON indiquant le succès de la déconnexion
         return response()->json(['message' => 'Déconnexion réussie.'], 200);
