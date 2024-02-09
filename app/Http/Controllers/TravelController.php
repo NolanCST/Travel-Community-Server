@@ -138,7 +138,7 @@ class TravelController extends Controller
      */
     public function update(Request $request, Travel $travel)
     {
-        //
+        
     }
 
     /**
