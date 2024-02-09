@@ -15,6 +15,9 @@ class TravelController extends Controller
     public function index()
     {
         $travels = Travel::getAll();
+        foreach ($travels as $element) {
+            $element->image = asset('storage/images/' . $element->image);
+        }
         $responseData = [
             'travels' => $travels,
         ];
@@ -136,9 +139,32 @@ class TravelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Travel $travel)
+    public function update(Request $request, $id)
     {
-        
+        $credentials = $request->validate([
+            'title' => 'required|max:50',
+            'description' => 'required',
+            'days' => 'required|integer',
+            'country' => 'required',
+            'user_id' => 'required',
+        ]);
+
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
+            $travel = Travel::findOrFail($id);
+
+            $travel->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'days' => $request->days,
+                'country' => $request->country,
+            ]);
+
+            return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
+        }
     }
 
     /**
