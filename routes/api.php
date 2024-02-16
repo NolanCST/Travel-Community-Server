@@ -18,20 +18,26 @@ use App\Http\Controllers\TravelController;
 |
 */
 
-Route::middleware('auth:sanctum')->group(function () {
-    // Récupération de l'utilisateur
-    Route::get('/user', function(Request $request) {return $request->user();});
+// Recuperation des voyages pour l'accueil
+Route::get('/travels', [TravelController::class, 'index'])->name('travels.index');
 
-    // Deconnexion
-    Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
-});
-
-// Toutes les routes pour travels
-Route::resource('/travels', TravelController::class);
+// Affichage des details d'un voyage
+Route::get('/travels/{travel}', [TravelController::class, 'show'])->name('travels.show');
 
 // Validation de l'inscription dans la BDD
 Route::post('/register', [ConnexionController::class, 'Register'])->name('register');
 
 // Connexion de l'utilisateur
 Route::post('/login', [ConnexionController::class, 'login'])->name('login');
-Route::post('/tokens/create', [AuthController::class, 'createToken']);
+// Route::post('/tokens/create', [AuthController::class, 'createToken']);
+
+Route::middleware('auth:sanctum')->group(function () {
+    // Récupération de l'utilisateur
+    Route::get('/user', function(Request $request) {return $request->user();});
+
+    // Deconnexion
+    Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
+
+    // Toutes les routes pour travels
+    Route::resource('/travels', TravelController::class)->except(['index', 'show']);
+});

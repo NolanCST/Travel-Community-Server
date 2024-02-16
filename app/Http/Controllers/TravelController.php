@@ -46,7 +46,7 @@ class TravelController extends Controller
             'days' => 'required|integer',
             'country' => 'required',
             'user_id' => 'required',
-            'travelDays' => 'required',
+             'travelDays' => 'required',
         ]);
 
         if (!$credentials) {
@@ -93,7 +93,7 @@ class TravelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Travel $travel)
+    public function show(Request $request, Travel $travel)
     {
         $dayImages = [];
 
@@ -144,9 +144,8 @@ class TravelController extends Controller
         $credentials = $request->validate([
             'title' => 'required|max:50',
             'description' => 'required',
-            'days' => 'required|integer',
+            'days' => 'required',
             'country' => 'required',
-            'user_id' => 'required',
         ]);
 
         if (!$credentials) {
@@ -155,7 +154,6 @@ class TravelController extends Controller
             ]);
         } else {
             $travel = Travel::findOrFail($id);
-
             $travel->update([
                 'title' => $request->title,
                 'description' => $request->description,
