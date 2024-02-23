@@ -6,6 +6,7 @@ use App\Models\Travel;
 use App\Models\TravelDay;
 use App\Models\DayImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TravelController extends Controller
 {
@@ -141,28 +142,37 @@ class TravelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $credentials = $request->validate([
-            'title' => 'required|max:50',
-            'description' => 'required',
-            'days' => 'required',
-            'country' => 'required',
-        ]);
+        // $credentials = $request->validate([
+        //     'title' => 'required|max:50',
+        //     'description' => 'required',
+        //     'image' => 'required',
+        //     'days' => 'required',
+        //     'country' => 'required',
+        // ]);
 
-        if (!$credentials) {
-            return Response()->json([
-                'validation_errors'=>$credentials->message(),
-            ]);
-        } else {
+        // if (!$credentials) {
+        //     return Response()->json([
+        //         'validation_errors'=>$credentials->message(),
+        //     ]);
+        // } else {
             $travel = Travel::findOrFail($id);
+
+            Storage::delete('public/images/'.$travel->image);
+
+            $fileName = time() . '.' .$request->image->getClientOriginalName();
+            $path = $request->image->storeAs('public/images', $fileName);
+
             $travel->update([
                 'title' => $request->title,
                 'description' => $request->description,
+                'image' => $fileName,
+                'alt' => $fileName,
                 'days' => $request->days,
                 'country' => $request->country,
             ]);
 
             return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
-        }
+        // }
     }
 
     /**
