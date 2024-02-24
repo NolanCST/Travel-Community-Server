@@ -15,7 +15,7 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::getAll();
+        $travels = Travel::orderBy('created_at', 'desc')->take(3)->get();
         foreach ($travels as $element) {
             $element->image = asset('storage/images/' . $element->image);
         }
@@ -47,7 +47,7 @@ class TravelController extends Controller
             'days' => 'required|integer',
             'country' => 'required',
             'user_id' => 'required',
-             'travelDays' => 'required',
+            'travelDays' => 'required',
         ]);
 
         if (!$credentials) {
@@ -142,25 +142,28 @@ class TravelController extends Controller
      */
     public function update(Request $request, $id)
     {
-        // $credentials = $request->validate([
-        //     'title' => 'required|max:50',
-        //     'description' => 'required',
-        //     'image' => 'required',
-        //     'days' => 'required',
-        //     'country' => 'required',
-        // ]);
+        $credentials = $request->validate([
+            'title' => 'required|max:50',
+            'description' => 'required',
+            'image' => 'mimes:jpg,png,svg',
+            'days' => 'required|integer',
+            'country' => 'required',
+            'travelDays' => 'required',
+        ]);
 
-        // if (!$credentials) {
-        //     return Response()->json([
-        //         'validation_errors'=>$credentials->message(),
-        //     ]);
-        // } else {
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
             $travel = Travel::findOrFail($id);
 
-            Storage::delete('public/images/'.$travel->image);
+            if($request->image) {
+                Storage::delete('public/images/'.$travel->image);
 
-            $fileName = time() . '.' .$request->image->getClientOriginalName();
-            $path = $request->image->storeAs('public/images', $fileName);
+                $fileName = time() . '.' .$request->image->getClientOriginalName();
+                $path = $request->image->storeAs('public/images', $fileName);
+            }
 
             $travel->update([
                 'title' => $request->title,
@@ -171,8 +174,18 @@ class TravelController extends Controller
                 'country' => $request->country,
             ]);
 
+            foreach ($request->travelDays as $travelDay) {
+                $editDay = TravelDay::findOrFail($travelDay['id']);
+
+                $editDay->update([
+                    'title_day' => $travelDay['title_day'],
+                    'description_day' => $travelDay['description_day'],
+                ]);
+                 
+            }
+
             return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
-        // }
+        }
     }
 
     /**
