@@ -40,4 +40,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Toutes les routes pour travels
     Route::resource('/travels', TravelController::class)->except(['index', 'show']);
+
+    // Suppression d'une image d'un jour
+    Route::delete('/imgDay/{id}', [TravelController::class, 'destroyImgDay'])->name('imgDay.destroy');
 });

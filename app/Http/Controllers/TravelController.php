@@ -146,8 +146,6 @@ class TravelController extends Controller
             'title' => 'required|max:50',
             'description' => 'required',
             'image' => 'mimes:jpg,png,svg',
-            'days' => 'required|integer',
-            'country' => 'required',
             'travelDays' => 'required',
         ]);
 
@@ -170,8 +168,6 @@ class TravelController extends Controller
                 'description' => $request->description,
                 'image' => $fileName,
                 'alt' => $fileName,
-                'days' => $request->days,
-                'country' => $request->country,
             ]);
 
             foreach ($request->travelDays as $travelDay) {
@@ -187,6 +183,20 @@ class TravelController extends Controller
             return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
         }
     }
+
+    public function destroyImgDay($id)
+    {
+        $imgDay = DayImage::findOrFail($id);
+
+        $result = $imgDay->delete();
+        
+        if($result) {
+            return ['message' => 'Image supprimé avec succès'];
+        } else {
+            return ['message' => 'Erreur dans la suppression de votre image'];
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.
