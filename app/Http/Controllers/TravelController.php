@@ -148,7 +148,6 @@ class TravelController extends Controller
             'image' => 'mimes:jpg,png,svg',
             'travelDays' => 'required',
         ]);
-
         if (!$credentials) {
             return Response()->json([
                 'validation_errors'=>$credentials->message(),
