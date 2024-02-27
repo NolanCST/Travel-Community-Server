@@ -178,6 +178,16 @@ class TravelController extends Controller
                     'description_day' => $travelDay['description_day'],
                 ]);
                  
+                foreach ($travelDay['images'] as $image) {
+                    $imageName = time() . '.' . $image->getClientOriginalName();
+                    $path = $image->storeAs('public/images', $imageName);
+                
+                    $addImage = DayImage::create([
+                        'image' => $imageName,
+                        'alt' => $imageName,
+                        'travel_day_id' => $editDay->id,
+                    ]);
+                }
             }
 
             return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
