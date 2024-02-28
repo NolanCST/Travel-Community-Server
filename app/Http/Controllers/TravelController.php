@@ -6,6 +6,7 @@ use App\Models\Travel;
 use App\Models\TravelDay;
 use App\Models\DayImage;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class TravelController extends Controller
 {
@@ -14,7 +15,10 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::getAll();
+        $travels = Travel::orderBy('created_at', 'desc')->take(3)->get();
+        foreach ($travels as $element) {
+            $element->image = asset('storage/images/' . $element->image);
+        }
         $responseData = [
             'travels' => $travels,
         ];
@@ -90,7 +94,7 @@ class TravelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Travel $travel)
+    public function show(Request $request, Travel $travel)
     {
         $dayImages = [];
 
@@ -136,10 +140,72 @@ class TravelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Travel $travel)
+    public function update(Request $request, $id)
     {
-        //
+        $credentials = $request->validate([
+            'title' => 'required|max:50',
+            'description' => 'required',
+            'image' => 'mimes:jpg,png,svg',
+            'travelDays' => 'required',
+        ]);
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
+            $travel = Travel::findOrFail($id);
+
+            if($request->image) {
+                Storage::delete('public/images/'.$travel->image);
+
+                $fileName = time() . '.' .$request->image->getClientOriginalName();
+                $path = $request->image->storeAs('public/images', $fileName);
+            }
+
+            $travel->update([
+                'title' => $request->title,
+                'description' => $request->description,
+                'image' => $fileName,
+                'alt' => $fileName,
+            ]);
+
+            foreach ($request->travelDays as $travelDay) {
+                $editDay = TravelDay::findOrFail($travelDay['id']);
+
+                $editDay->update([
+                    'title_day' => $travelDay['title_day'],
+                    'description_day' => $travelDay['description_day'],
+                ]);
+                 
+                foreach ($travelDay['images'] as $image) {
+                    $imageName = time() . '.' . $image->getClientOriginalName();
+                    $path = $image->storeAs('public/images', $imageName);
+                
+                    $addImage = DayImage::create([
+                        'image' => $imageName,
+                        'alt' => $imageName,
+                        'travel_day_id' => $editDay->id,
+                    ]);
+                }
+            }
+
+            return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
+        }
     }
+
+    public function destroyImgDay($id)
+    {
+        $imgDay = DayImage::findOrFail($id);
+
+        $result = $imgDay->delete();
+        
+        if($result) {
+            return ['message' => 'Image supprimé avec succès'];
+        } else {
+            return ['message' => 'Erreur dans la suppression de votre image'];
+        }
+    }
+
 
     /**
      * Remove the specified resource from storage.
