@@ -35,6 +35,12 @@ Route::middleware('auth:sanctum')->group(function () {
     // Récupération de l'utilisateur
     Route::get('/user', function(Request $request) {return $request->user();});
 
+    // Modification de l'utilisateur
+    Route::put('/user/{id}', [UserController::class, 'update'])->name('user.update');
+
+    // Suppression de l'utilisateur
+    Route::delete('/user/{id}', [UserController::class, 'destroy'])->name('user.destroy');
+
     // Deconnexion
     Route::post('/logout', [ConnexionController::class, 'logout'])->name('logout');
 
