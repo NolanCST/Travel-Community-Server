@@ -13,4 +13,8 @@ class Legislation extends Model
         'country',
         'rules'
     ];
+
+    public static function getAll() {
+        return Legislation::select('legislations.country')->get();
+    }
 }

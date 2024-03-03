@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Travel;
 use App\Models\TravelDay;
 use App\Models\DayImage;
+use App\Models\Legislation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -15,10 +16,11 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::orderBy('created_at', 'desc')->take(3)->get();
+        $travels = Travel::orderBy('created_at', 'desc')->with('legislations')->take(3)->get();
         foreach ($travels as $element) {
             $element->image = asset('storage/images/' . $element->image);
         }
+
         $responseData = [
             'travels' => $travels,
         ];
@@ -68,6 +70,10 @@ class TravelController extends Controller
                 'country' => $request->country,
                 'user_id' => $request->user_id,
             ]);
+
+            if (isset($request->country)) {
+                $travel->legislations()->attach($request->country);
+            }
             
             foreach ($request->travelDays as $travelDay) {
                 

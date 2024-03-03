@@ -22,7 +22,9 @@ class Travel extends Model
     protected $table = 'travels';
 
     public static function getAll() {
-        return Travel::select('travels.*')->get();
+        return Travel::select('travels.*')
+        ->with('legislations')
+        ->get();
     }
 
     public function legislations() {
