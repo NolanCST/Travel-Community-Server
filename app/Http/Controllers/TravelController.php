@@ -16,7 +16,10 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::orderBy('created_at', 'desc')->with('legislations')->take(3)->get();
+        // $travels = Travel::orderBy('created_at', 'desc')->with('legislations')->take(3)->get();
+        
+        $travels = Travel::getAll();
+
         foreach ($travels as $element) {
             $element->image = asset('storage/images/' . $element->image);
         }
