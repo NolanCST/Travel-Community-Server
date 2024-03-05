@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ConnexionController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TravelController;
+use App\Http\Controllers\RateController;
 
 
 /*
@@ -49,4 +50,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Suppression d'une image d'un jour
     Route::delete('/imgDay/{id}', [TravelController::class, 'destroyImgDay'])->name('imgDay.destroy');
+
+    // Ajout d'un avis
+    Route::post('/rates', [RateController::class, 'create'])->name('rates.create');
 });
