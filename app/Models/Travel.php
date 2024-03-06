@@ -26,6 +26,7 @@ class Travel extends Model
         ->with('legislations')
         ->leftjoin('rates', 'travels.id', '=', 'rates.travel_id')
         ->selectRaw('travels.*, COUNT(rates.id) as total_rates, ROUND(AVG(rates.rate), 1) as average_rating')
+        ->groupBy('travels.id')
         ->get();
     }
 

@@ -6,6 +6,7 @@ use App\Models\Travel;
 use App\Models\TravelDay;
 use App\Models\DayImage;
 use App\Models\Legislation;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -105,6 +106,17 @@ class TravelController extends Controller
      */
     public function show(Request $request, Travel $travel)
     {
+        $rates = Rate::with('user')->where('travel_id', $travel['id'])->orderBy('id', 'desc')->get()->toArray();
+
+        $ratingsSum = Rate::where('travel_id', $travel['id'])->sum('rate');
+        $ratingsCount = Rate::where('travel_id', $travel['id'])->count();
+        $avgRating = 0;
+        $avgStarRating = 0;
+        if ($ratingsCount>0){
+            $avgRating = round($ratingsSum/$ratingsCount,2);
+            $avgStarRating = round($ratingsSum/$ratingsCount);
+        }
+        
         $dayImages = [];
 
         $travelDays = TravelDay::where('travel_id', $travel['id'])->get();
@@ -127,11 +139,15 @@ class TravelController extends Controller
         foreach ($travel as $element) {
             $element->image = asset('storage/images/' . $element->image);
         }
-
+        
         $responseData = [
             'travel' => $travel,
             'travelDays' => $travelDays,
             'dayImages' => $dayImages,
+            'rates' => $rates,
+            'avgRating' => $avgRating,
+            'avgStarRating' => $avgStarRating,
+            'ratingsCount' => $ratingsCount,
         ];
 
         return response()->json($responseData);
