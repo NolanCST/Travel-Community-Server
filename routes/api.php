@@ -53,4 +53,10 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Ajout d'un avis
     Route::post('/rates', [RateController::class, 'create'])->name('rates.create');
+
+// Modifier un avis
+Route::put('/rates/{rate}', [RateController::class, 'update'])->name('rates.update');
+
+    // Suppression d'un avis
+    Route::delete('/rates/{rate}', [RateController::class, 'destroy'])->name('rates.destroy');
 });

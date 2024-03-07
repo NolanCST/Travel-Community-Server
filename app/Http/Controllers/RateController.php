@@ -30,4 +30,36 @@ class RateController extends Controller
         ]);
         }
     }
+
+    public function update(Request $request, Rate $rate)
+    {
+        $credentials = $request->validate([
+            'rate' => 'required|min:1|max:5',
+            'review' => 'max:1000',
+        ]);
+
+        if (!$credentials) {
+            return Response()->json([
+                'validation_errors'=>$credentials->message(),
+            ]);
+        } else {
+        $rate->rate = $request->rate;
+        $rate->review = $request->review;
+
+        $rate->save();
+
+        return ['message'=>'Modification de l\'avis réussie'];
+        }
+    }
+
+
+    public function destroy (Rate $rate) {
+        $result = $rate->delete();
+        if ($result) {
+            return ['message' => 'Avis supprimé avec succès'];
+        } else {
+            return ['message' => 'Erreur dans la suppression de votre avis'];
+        }
+        
+    }
 }
