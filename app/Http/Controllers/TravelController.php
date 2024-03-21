@@ -61,7 +61,6 @@ class TravelController extends Controller
                 'validation_errors'=>$credentials->message(),
             ]);
         } else {
-
             $fileName = time() . '.' .$request->image->getClientOriginalName();
             $path = $request->image->storeAs('public/images', $fileName);
 
@@ -98,6 +97,10 @@ class TravelController extends Controller
                     ]);
                 }
             }
+
+            return Response()->json([
+                'Response'=>'création du voyage réussi',
+            ]);
         }
     }
 
