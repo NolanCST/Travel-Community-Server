@@ -183,19 +183,24 @@ class TravelController extends Controller
         } else {
             $travel = Travel::findOrFail($id);
 
-            if($request->image) {
+            if(isset($request->image)) {
                 Storage::delete('public/images/'.$travel->image);
-
+            
                 $fileName = time() . '.' .$request->image->getClientOriginalName();
                 $path = $request->image->storeAs('public/images', $fileName);
+                
+                $travel->update([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'image' => $fileName,
+                    'alt' => $fileName,
+                ]);
+            } else {
+                $travel->update([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                ]);
             }
-
-            $travel->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => $fileName,
-                'alt' => $fileName,
-            ]);
 
             foreach ($request->travelDays as $travelDay) {
                 $editDay = TravelDay::findOrFail($travelDay['id']);
@@ -205,16 +210,19 @@ class TravelController extends Controller
                     'description_day' => $travelDay['description_day'],
                 ]);
                  
-                foreach ($travelDay['images'] as $image) {
-                    $imageName = time() . '.' . $image->getClientOriginalName();
-                    $path = $image->storeAs('public/images', $imageName);
-                
-                    $addImage = DayImage::create([
-                        'image' => $imageName,
-                        'alt' => $imageName,
-                        'travel_day_id' => $editDay->id,
-                    ]);
+                if (isset($travelDay['images'])) {
+                    foreach ($travelDay['images'] as $image) {
+                        $imageName = time() . '.' . $image->getClientOriginalName();
+                        $path = $image->storeAs('public/images', $imageName);
+                    
+                        $addImage = DayImage::create([
+                            'image' => $imageName,
+                            'alt' => $imageName,
+                            'travel_day_id' => $editDay->id,
+                        ]);
+                    }
                 }
+                
             }
 
             return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
