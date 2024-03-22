@@ -29,7 +29,7 @@ class ConnexionController extends Controller
                 'firstname' => $request->firstname,
                 'pseudo' => $request->pseudo,
                 'email' => $request->email,
-                'password' => $request->password,
+                'password' => bcrypt($request->password),
                 'country' => $request->country,
                 'status' => 0 // A voir comment je gère le status
             ]);

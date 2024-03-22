@@ -15,7 +15,7 @@ class LegislationSeeder extends Seeder
     {
         DB::table('legislations')->insert([
             [
-                'country' => 'United States',
+                'country' => 'États-Unis',
                 'rules' => 'Mesures liées à la Covid-19
                 Depuis le 12 mai 2023, l’obligation de vaccination contre le Covid-19 est supprimée pour les voyageurs se rendant aux États-Unis, que ce soit par voie aérienne, terrestre ou maritime.
                 
@@ -123,7 +123,7 @@ class LegislationSeeder extends Seeder
                 Plus d’informations sur le site Internet des douanes américaines.',
             ],
             [
-                'country' => 'United Kingdom',
+                'country' => 'Royaume-Unis',
                 'rules' => 'Formalités d’entrée et de séjour
                 SIGNALÉ : Les voyageurs français et européens doivent disposer d’un passeport valide pour entrer au Royaume-Uni. Seuls les résidents bénéficiaires de l’Accord de retrait du Royaume-Uni de l’Union européenne, éligibles au (pre)settled status, peuvent continuer à utiliser une carte d’identité, au moins jusqu’en 2025.
                 
@@ -267,7 +267,7 @@ class LegislationSeeder extends Seeder
                 Eurotunnel dispose également d’une page dédiée au transport des animaux de compagnie empruntant le Shuttle.',
             ],
             [
-                'country' => 'Germany',
+                'country' => 'Allemagne',
                 'rules' => 'Formalités d’entrée
                 L’Allemagne étant membre de l’Union européenne, les ressortissants français peuvent y entrer librement munis d’un passeport ou d’une carte nationale d’identité.
                 
@@ -288,7 +288,7 @@ class LegislationSeeder extends Seeder
                 Toutes les mesures de restrictions sanitaires pour l’entrée sur le territoire ont été levées.',
             ],
             [
-                'country' => 'Netherlands',
+                'country' => 'Pays-Bas',
                 'rules' => 'Formalités d’entrée
                 Les Pays-Bas étant membre de l’Union européenne, les ressortissants français peuvent y entrer librement munis d’un passeport ou d’une carte nationale d’identité en cours de validité.
                 
@@ -338,7 +338,7 @@ class LegislationSeeder extends Seeder
                 Il convient de s’informer sur l’évolution de la situation sanitaire et les consignes des autorités locales, notamment sur le site de l’institut national pour la santé publique et l’environnement avant d’envisager un déplacement dans le pays, notamment en consultant le site du consulat général de France à Amsterdam.',
             ],
             [
-                'country' => 'Australia',
+                'country' => 'Australie',
                 'rules' => 'Mesures liées au Covid
                 Toutes les mesures de restrictions sanitaires pour l’entrée sur le territoire ont été levées.
                 
@@ -407,7 +407,7 @@ class LegislationSeeder extends Seeder
                 Plus d’informations sur le site Internet du ministère australien de l’Intérieur (en anglais).',
             ],
             [
-                'country' => 'Brazil',
+                'country' => 'Brésil',
                 'rules' => 'Mesures liées à la Covid-19
                 Comme mentionné sur le site du Consulat général du Brésil à Paris, toutes les mesures de restriction sanitaire pour l’entrée sur le territoire ont été levées.
                 
@@ -530,7 +530,7 @@ class LegislationSeeder extends Seeder
                 Ce site est développé par Atout France, opérateur national en matière de tourisme sous la tutelle du ministère de l’Europe et des Affaires étrangères.)',
             ],
             [
-                'country' => 'Italy',
+                'country' => 'Italie',
                 'rules' => 'Formalités d’entrée
                 Pour un séjour de trois mois maximum, les ressortissants français doivent être en possession d’une pièce d’identité (carte nationale d’identité ou passeport, à l’exclusion de tout autre document) en cours de validité. Cela s’applique également aux mineurs, le livret de famille n’étant pas un document de voyage.
                 
@@ -554,7 +554,7 @@ class LegislationSeeder extends Seeder
                 Pour plus d’informations, réglementation sur les animaux de compagnie.'
             ],
             [
-                'country' => 'India',
+                'country' => 'Inde',
                 'rules' => 'Formalités d’entrée
                 Mesures sanitaires applicables à l’arrivée
                 A ce stade, les voyageurs en provenance de la France ne sont plus obligés de se soumettre à un test PCR avant leur départ, ni de justifier d’un statut vaccinal.

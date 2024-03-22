@@ -6,6 +6,7 @@ use App\Models\Travel;
 use App\Models\TravelDay;
 use App\Models\DayImage;
 use App\Models\Legislation;
+use App\Models\Rate;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -16,7 +17,10 @@ class TravelController extends Controller
      */
     public function index()
     {
-        $travels = Travel::orderBy('created_at', 'desc')->with('legislations')->take(3)->get();
+        // $travels = Travel::orderBy('created_at', 'desc')->with('legislations')->take(3)->get();
+        
+        $travels = Travel::getAll();
+
         foreach ($travels as $element) {
             $element->image = asset('storage/images/' . $element->image);
         }
@@ -57,7 +61,6 @@ class TravelController extends Controller
                 'validation_errors'=>$credentials->message(),
             ]);
         } else {
-
             $fileName = time() . '.' .$request->image->getClientOriginalName();
             $path = $request->image->storeAs('public/images', $fileName);
 
@@ -94,6 +97,10 @@ class TravelController extends Controller
                     ]);
                 }
             }
+
+            return Response()->json([
+                'Response'=>'création du voyage réussi',
+            ]);
         }
     }
 
@@ -102,6 +109,17 @@ class TravelController extends Controller
      */
     public function show(Request $request, Travel $travel)
     {
+        $rates = Rate::with('user')->where('travel_id', $travel['id'])->orderBy('id', 'desc')->get()->toArray();
+
+        $ratingsSum = Rate::where('travel_id', $travel['id'])->sum('rate');
+        $ratingsCount = Rate::where('travel_id', $travel['id'])->count();
+        $avgRating = 0;
+        $avgStarRating = 0;
+        if ($ratingsCount>0){
+            $avgRating = round($ratingsSum/$ratingsCount,2);
+            $avgStarRating = round($ratingsSum/$ratingsCount);
+        }
+        
         $dayImages = [];
 
         $travelDays = TravelDay::where('travel_id', $travel['id'])->get();
@@ -124,11 +142,15 @@ class TravelController extends Controller
         foreach ($travel as $element) {
             $element->image = asset('storage/images/' . $element->image);
         }
-
+        
         $responseData = [
             'travel' => $travel,
             'travelDays' => $travelDays,
             'dayImages' => $dayImages,
+            'rates' => $rates,
+            'avgRating' => $avgRating,
+            'avgStarRating' => $avgStarRating,
+            'ratingsCount' => $ratingsCount,
         ];
 
         return response()->json($responseData);
@@ -161,19 +183,24 @@ class TravelController extends Controller
         } else {
             $travel = Travel::findOrFail($id);
 
-            if($request->image) {
+            if(isset($request->image)) {
                 Storage::delete('public/images/'.$travel->image);
-
+            
                 $fileName = time() . '.' .$request->image->getClientOriginalName();
                 $path = $request->image->storeAs('public/images', $fileName);
+                
+                $travel->update([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                    'image' => $fileName,
+                    'alt' => $fileName,
+                ]);
+            } else {
+                $travel->update([
+                    'title' => $request->title,
+                    'description' => $request->description,
+                ]);
             }
-
-            $travel->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'image' => $fileName,
-                'alt' => $fileName,
-            ]);
 
             foreach ($request->travelDays as $travelDay) {
                 $editDay = TravelDay::findOrFail($travelDay['id']);
@@ -183,16 +210,19 @@ class TravelController extends Controller
                     'description_day' => $travelDay['description_day'],
                 ]);
                  
-                foreach ($travelDay['images'] as $image) {
-                    $imageName = time() . '.' . $image->getClientOriginalName();
-                    $path = $image->storeAs('public/images', $imageName);
-                
-                    $addImage = DayImage::create([
-                        'image' => $imageName,
-                        'alt' => $imageName,
-                        'travel_day_id' => $editDay->id,
-                    ]);
+                if (isset($travelDay['images'])) {
+                    foreach ($travelDay['images'] as $image) {
+                        $imageName = time() . '.' . $image->getClientOriginalName();
+                        $path = $image->storeAs('public/images', $imageName);
+                    
+                        $addImage = DayImage::create([
+                            'image' => $imageName,
+                            'alt' => $imageName,
+                            'travel_day_id' => $editDay->id,
+                        ]);
+                    }
                 }
+                
             }
 
             return response()->json(['message'=>'Modification du voyage effectuée avec succès']);
