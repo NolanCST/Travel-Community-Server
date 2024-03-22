@@ -221,7 +221,7 @@ class TravelController extends Controller
         $result = $travel->delete();
         
         if($result) {
-            return ['message' => 'Voyage supprimé avec succès'];
+            return ['message' => 'Voyage supprimé avec succès.'];
         } else {
             return ['message' => 'Erreur dans la suppression de votre voyage'];
         }
