@@ -28,6 +28,8 @@ class RateController extends Controller
             'user_id' => Auth::user()->id,
             'travel_id' => $request->travel_id,
         ]);
+
+        return ['message'=>'Création de l\'avis réussie'];
         }
     }
 
